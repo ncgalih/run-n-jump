@@ -11,11 +11,15 @@
   border-bottom-width: 2px;
   border-bottom-style: solid;
   position: relative;
+  overflow: hidden;
 }
 
 .player {
-  height: 3rem;
-  width: 3rem;
-  background-color: coral;
+  background-color: gold;
+  position: absolute;
+}
+
+.obstacle {
+  background-color:firebrick;
   position: absolute;
 }

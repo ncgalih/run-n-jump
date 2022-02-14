@@ -1,9 +1,17 @@
 import { useEffect } from 'react';
 import './App.css';
+import createObstacle from './Engine/createObstacle';
+import useGame from './Engine/useGame';
 import usePlayer from './Engine/usePlayer';
+import useObstacle from './useObtacle';
 
 function App() {
-  const player = usePlayer()
+  const player = usePlayer(50,50)
+  const obstacles = useObstacle()
+  const game = useGame()
+  useEffect(()=>{
+    game.listen(player,obstacles)
+  })
   useEffect(()=>{
     document.addEventListener('keydown',(e)=>{
       if(e.key==='ArrowUp'||e.key===' ') if(!player.isJumping) player.jump()
@@ -19,15 +27,27 @@ function App() {
     })
     return () => document.removeEventListener()
   }, [])
+  const paddingLeft = 80
   return (
     <div className="canvas">
       <div className='player' onClick={()=>player.jump()} style={{
-        left: player.x,
-        bottom: player.y
+        bottom: player.y,
+        left: paddingLeft,
+        height: player.height,
+        width: player.width
       }}>
         {player.y}
       </div>
-        <p>score: {player.x}</p>
+      {obstacles.map(obs=>
+        <div className='obstacle' style={{
+          left: obs.x - player.x + paddingLeft,
+          bottom: 0,
+          height: obs.h,
+          width: obs.w
+        }}>
+        </div>)}
+
+        <p>score: {Math.round(player.x/25) }</p>
     </div>
   );
 }

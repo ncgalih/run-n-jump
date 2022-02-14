@@ -1,6 +1,6 @@
 import { useRef, useState } from "react"
 
-const usePlayer = () => {
+const usePlayer = (width, height) => {
     const [x, setX] = useState(0)
     const [y, setY] = useState(0)
 
@@ -60,9 +60,12 @@ const usePlayer = () => {
         isRunning = false
         t_prevRun = null
     }
-    
+    const restart = () => {
+        setX(0)
+        setY(0)
+    }
 
-    return {x,y, jump, run, stopRun, isRunning, isJumping}
+    return {x,y, jump, run, stopRun, restart, isRunning, isJumping, height, width}
 }
 
 export default usePlayer
