@@ -1,31 +1,39 @@
 import { useEffect } from 'react';
 import './App.css';
-import createObstacle from './Engine/createObstacle';
 import useGame from './Engine/useGame';
 import usePlayer from './Engine/usePlayer';
 import useObstacle from './useObtacle';
 
 function App() {
   const player = usePlayer(50,50)
-  const obstacles = useObstacle()
+  const [obstacles, addObstacle, resetObs] = useObstacle()
   const game = useGame()
   useEffect(()=>{
-    game.listen(player,obstacles)
+    game.listen(player, obstacles, resetObs)
   })
   useEffect(()=>{
-    document.addEventListener('keydown',(e)=>{
+    if(player.x>obstacles[obstacles.length-3].x) addObstacle()
+  })
+  
+  useEffect(()=>{
+    const handleKeyDown = (e)=>{
       if(e.key==='ArrowUp'||e.key===' ') if(!player.isJumping) player.jump()
       if(e.key==='ArrowRight') {
         if(!player.isRunning) player.run('right')
       }
       if(e.key==='ArrowLeft') {
         if(!player.isRunning) player.run('left')
+        }
       }
-    })
-    document.addEventListener('keyup', (e)=> {
+    const handleKeyUp = (e)=> {
       if(e.key==='ArrowRight'||e.key==='ArrowLeft') player.stopRun()
-    })
-    return () => document.removeEventListener()
+    }
+    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('keyup', handleKeyUp)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keyup', handleKeyUp)
+    }
   }, [])
   const paddingLeft = 80
   return (
@@ -38,16 +46,17 @@ function App() {
       }}>
         {player.y}
       </div>
-      {obstacles.map(obs=>
-        <div className='obstacle' style={{
+      {obstacles.length>0 && obstacles.map((obs, key)=>
+        <div className='obstacle' key={key} style={{
           left: obs.x - player.x + paddingLeft,
           bottom: 0,
           height: obs.h,
-          width: obs.w
+          width: obs.w,
+          backgroundColor: obs.color
         }}>
         </div>)}
 
-        <p>score: {Math.round(player.x/25) }</p>
+        <p>score: {Math.round(player.x/25)}</p>
     </div>
   );
 }

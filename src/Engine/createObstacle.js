@@ -1,6 +1,6 @@
-const createObstacle = (x, w, h) => {
+const createObstacle = (x, w, h, color) => {
     return {
-        x, w, h
+        x, w, h, color
     }
 }
 export default createObstacle
