@@ -1,23 +1,17 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
 import './App.css';
+import usePlayer from './Engine/usePlayer';
 
 function App() {
+  const player = usePlayer()
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="canvas">
+      <div className='player' onClick={()=>player.jump()} style={{
+        left: player.x,
+        bottom: player.y
+      }}>
+        {player.y}
+      </div>
     </div>
   );
 }
