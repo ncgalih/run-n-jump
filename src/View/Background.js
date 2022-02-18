@@ -3,10 +3,12 @@ import useBuilding from "../Engine/useBuilding"
 import Building from "./Building"
 
 const Background = ({player_x}) => {
-    const {buildings, addBuilding} = useBuilding()
+    const {buildings, addBuilding, destroyBuilding, reset} = useBuilding()
     useEffect(()=>{
         const body_w = document.body.clientWidth
         if((buildings[buildings.length-1].x-player_x/16)<body_w+100) addBuilding()
+        if((buildings[0].x+120)<player_x/16) destroyBuilding()
+        if((buildings[0].x>30)&&player_x===0) reset()
     })
     return(
         <>

@@ -18,11 +18,16 @@ const createBuilding = (prev_building = {x:0, w:0}) => {
 }
 
 const useBuilding = () => {
-    const [buildings, setBuilding] = useState([
-        createBuilding()
-    ])
+    const [buildings, setBuilding] = useState([createBuilding()])
     const addBuilding = () => setBuilding([...buildings, createBuilding(buildings[buildings.length-1])])
-    return {buildings, addBuilding}
+    const destroyBuilding = () => {
+        const temp = [...buildings]
+        temp.splice(0,1)
+        setBuilding(temp)
+    }
+    const reset = () => setBuilding([createBuilding()])
+
+    return {buildings, addBuilding, destroyBuilding, reset}
 }
 
 export default useBuilding
