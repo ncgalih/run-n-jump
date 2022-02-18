@@ -3,23 +3,38 @@
   padding: 0;
   box-sizing: border-box;
 }
+body {
+  background-image: linear-gradient(to bottom, #0369a1, #38bdf8);
+}
 
 .canvas {
   height: 80vh;
   width: 100vw;
-  border-bottom: 5px;
-  border-bottom-width: 2px;
-  border-bottom-style: solid;
   position: relative;
   overflow: hidden;
+  z-index: 100;
 }
 
 .player {
   background-color: gold;
   position: absolute;
+  z-index: 100;
 }
 
 .obstacle {
   background-color:firebrick;
   position: absolute;
+  z-index: 100; 
+}
+
+.floor {
+  background-color: #b45309;
+  width: 100%;
+  height: 20vh;
+} 
+
+.building {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
 }

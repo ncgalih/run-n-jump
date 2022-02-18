@@ -2,7 +2,8 @@ import { useEffect } from 'react';
 import './App.css';
 import useGame from './Engine/useGame';
 import usePlayer from './Engine/usePlayer';
-import useObstacle from './useObtacle';
+import useObstacle from './Engine/useObtacle';
+import Background from './View/Background';
 
 function App() {
   const player = usePlayer(50,50)
@@ -37,6 +38,7 @@ function App() {
   }, [])
   const paddingLeft = 80
   return (
+    <>
     <div className="canvas">
       <div className='player' onClick={()=>player.jump()} style={{
         bottom: player.y,
@@ -55,9 +57,13 @@ function App() {
           backgroundColor: obs.color
         }}>
         </div>)}
-
-        <p>score: {Math.round(player.x/25)}</p>
+      <Background player_x={player.x} />
+      <p>score: {Math.round(player.x/25)}</p>
     </div>
+    <div className='floor'>
+        tes
+    </div>
+    </>
   );
 }
 
