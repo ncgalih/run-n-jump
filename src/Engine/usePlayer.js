@@ -1,8 +1,16 @@
-import { useEffect, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 const usePlayer = (width, height) => {
     const [x, setX] = useState(0)
     const [y, setY] = useState(0)
+    const [life, setLife] = useState(3)
+    const [immune, setImunne] = useState(false)
+
+    const hit = () => {
+        setImunne(true)
+        setLife(prevLive => prevLive-1)
+        setTimeout(()=>setImunne(false),2000)
+    }
 
     const jump_velocity = (t) => t*4
     const gravity = (t) => t*t*9.8/2
@@ -60,11 +68,12 @@ const usePlayer = (width, height) => {
         t_prevRun.current = null
     }
     const restart = () => {
+        setLife(3)
         setX(0)
         setY(0)
     }
 
-    return {x,y, jump, run, stopRun, restart, isRunning, isJumping, height, width}
+    return {x,y, jump, run, stopRun, restart, hit, isRunning, isJumping, height, width, life, immune}
 }
 
 export default usePlayer

@@ -4,11 +4,14 @@ import useGame from './Engine/useGame';
 import usePlayer from './Engine/usePlayer';
 import useObstacle from './Engine/useObtacle';
 import Background from './View/Background';
+import InfoBar from './View/InfoBar';
+import useSky from './Engine/useSky';
 
 function App() {
   const player = usePlayer(50,50)
   const [obstacles, addObstacle, resetObs] = useObstacle()
   const game = useGame()
+  const sky = useSky()
   useEffect(()=>{
     game.listen(player, obstacles, resetObs)
   })
@@ -26,9 +29,6 @@ function App() {
         if(!player.isRunning) player.run()
       }
     }
-    const handleKeyUp = (e)=> {
-      if(e.key==='ArrowRight'||e.key==='ArrowLeft') player.stopRun()
-    }
     document.addEventListener('keydown', handleKeyDown)
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
@@ -37,12 +37,15 @@ function App() {
   const paddingLeft = 80
   return (
     <>
-    <div className="canvas">
+    <div className="canvas day" style={{
+      backgroundImage: sky.bg
+    }}>
       <div className='player' onClick={()=>player.jump()} style={{
         bottom: player.y,
         left: paddingLeft,
         height: player.height,
-        width: player.width
+        width: player.width,
+        opacity: player.immune? '50%' : '100%'
       }}>
       </div>
       {obstacles.length>0 && obstacles.map((obs, key)=>
@@ -55,10 +58,9 @@ function App() {
         }}>
         </div>)}
       <Background player_x={player.x} />
-      <p>score: {Math.round(player.x/25)}</p>
+      <InfoBar player={player} />
     </div>
-    <div className='floor'>
-    </div>
+    <div className='floor'></div>
     </>
   );
 }

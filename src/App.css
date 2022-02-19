@@ -3,9 +3,6 @@
   padding: 0;
   box-sizing: border-box;
 }
-body {
-  background-image: linear-gradient(to bottom, #0369a1, #38bdf8);
-}
 
 .canvas {
   height: 80vh;
@@ -13,6 +10,13 @@ body {
   position: relative;
   overflow: hidden;
   z-index: 100;
+}
+
+.day {
+  -webkit-transition: all 3s linear;
+  -moz-transition: all 3s linear;
+  -o-transition: all 3s linear;
+  transition: all 3s linear;
 }
 
 .player {
@@ -37,4 +41,21 @@ body {
   position: absolute;
   z-index: 10;
   bottom: 0;
+}
+
+.infobar {
+  padding: 1.2rem 1.5rem 1.2rem 1.5rem;
+  margin-top: 1.5rem;
+  margin-left: 1.5rem;
+  border-radius: 0.3rem;
+  background-color: #111827;
+  width: fit-content;
+
+}
+.infobar p {
+  color: white;
+  margin-right: 6px;
+}
+.infobar .info {
+  display: flex;
 }
