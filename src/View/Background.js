@@ -13,7 +13,6 @@ const Background = ({player_x}) => {
     return(
         <>
         <div className="buildings">
-            tes
             {buildings.map((building, key)=>{
                 return <Building {...building} x={building.x - player_x/16} key={key} />}
             )}

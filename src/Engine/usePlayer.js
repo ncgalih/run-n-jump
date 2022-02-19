@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const usePlayer = (width, height) => {
     const [x, setX] = useState(0)
@@ -13,14 +13,13 @@ const usePlayer = (width, height) => {
     const jumpStart = useRef(null)
     const jumpRef = useRef()
     let isJumping = false
-    let y_jump = 0
     const jump = () => {
         jumpRef.current = requestAnimationFrame(jumping)
     }
     const jumping = (timestamp) => {
         if(jumpStart.current===null) jumpStart.current = timestamp 
         const t = (timestamp - jumpStart.current)/1000
-        y_jump = Math.max((jump_velocity(t)-gravity(t))*scale,0)
+        const y_jump = Math.max((jump_velocity(t)-gravity(t))*scale,0)
         setY(y_jump)
         if(isJumping && y_jump===0){
             jumpStart.current = null
@@ -34,31 +33,31 @@ const usePlayer = (width, height) => {
 
     //Run 
     const runRef = useRef()
-    let isRunning = false
-    let x_run = 0
-    let t_prevRun = null
-    let direction = 'right'
-    const run = (direct) => {
-        if(isRunning) return
-        console.log('start')
-        direction = direct
-        isRunning = true
-        runRef.current = requestAnimationFrame(running)
+    const t_prevRun = useRef(null)
+    const [ isRunning, setRun ] = useState(false)
+    const run = () => {
+        if(!isRunning) {
+            console.log('start')
+            setRun(true)
+            runRef.current = requestAnimationFrame(running)
+        }
     }
     const running = (timestamp) => {
-        if(t_prevRun===null) t_prevRun=timestamp
-        const t = (timestamp - t_prevRun)/1000
-        x_run = run_velocity(t)*scale
-        if(direction==='right') setX(prevX=>prevX+x_run)
-        else setX(prevX=>prevX-x_run)
-        t_prevRun = timestamp
+        if(t_prevRun.current===null) t_prevRun.current=timestamp
+        else {
+            console.log('running')
+            const dt = (timestamp - t_prevRun.current)/1000
+            const dx = run_velocity(dt)*scale
+            setX(prevX=>prevX+dx)
+            t_prevRun.current = timestamp 
+        }
         runRef.current = requestAnimationFrame(running)
     }
     const stopRun = () => {
         cancelAnimationFrame(runRef.current)
         console.log('stop')
-        isRunning = false
-        t_prevRun = null
+        setRun(false)
+        t_prevRun.current = null
     }
     const restart = () => {
         setX(0)

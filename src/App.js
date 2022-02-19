@@ -18,24 +18,22 @@ function App() {
   
   useEffect(()=>{
     const handleKeyDown = (e)=>{
-      if(e.key==='ArrowUp'||e.key===' ') if(!player.isJumping) player.jump()
+      if(e.key==='ArrowUp'||e.key===' '){ 
+        if(!player.isRunning) player.run()
+        else if(!player.isJumping) player.jump()
+      }
       if(e.key==='ArrowRight') {
-        if(!player.isRunning) player.run('right')
+        if(!player.isRunning) player.run()
       }
-      if(e.key==='ArrowLeft') {
-        if(!player.isRunning) player.run('left')
-        }
-      }
+    }
     const handleKeyUp = (e)=> {
       if(e.key==='ArrowRight'||e.key==='ArrowLeft') player.stopRun()
     }
     document.addEventListener('keydown', handleKeyDown)
-    document.addEventListener('keyup', handleKeyUp)
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
-      document.removeEventListener('keyup', handleKeyUp)
     }
-  }, [])
+  })
   const paddingLeft = 80
   return (
     <>
@@ -46,7 +44,6 @@ function App() {
         height: player.height,
         width: player.width
       }}>
-        {player.y}
       </div>
       {obstacles.length>0 && obstacles.map((obs, key)=>
         <div className='obstacle' key={key} style={{
@@ -61,7 +58,6 @@ function App() {
       <p>score: {Math.round(player.x/25)}</p>
     </div>
     <div className='floor'>
-        tes
     </div>
     </>
   );
