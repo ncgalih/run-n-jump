@@ -6,12 +6,6 @@ const usePlayer = (width, height) => {
     const [life, setLife] = useState(3)
     const [immune, setImunne] = useState(false)
 
-    const hit = () => {
-        setImunne(true)
-        setLife(prevLive => prevLive-1)
-        setTimeout(()=>setImunne(false),2000)
-    }
-
     const jump_velocity = (t) => t*4
     const gravity = (t) => t*t*9.8/2
     const run_velocity = (t) => t*4
@@ -53,7 +47,6 @@ const usePlayer = (width, height) => {
     const running = (timestamp) => {
         if(t_prevRun.current===null) t_prevRun.current=timestamp
         else {
-            console.log('running')
             const dt = (timestamp - t_prevRun.current)/1000
             const dx = run_velocity(dt)*scale
             setX(prevX=>prevX+dx)
@@ -73,7 +66,29 @@ const usePlayer = (width, height) => {
         setY(0)
     }
 
-    return {x,y, jump, run, stopRun, restart, hit, isRunning, isJumping, height, width, life, immune}
+    const [opacity, setOpacity] = useState(100)
+    const blinkRef = useRef()
+    const blinkStart = useRef(null)
+    const hit = () => {
+        setImunne(true)
+        setLife(prevLive => prevLive-1)
+        blinkRef.current = requestAnimationFrame(blinking)
+        setTimeout(()=>{
+            setImunne(false)
+            blinkStart.current = null
+            setOpacity(100)
+            cancelAnimationFrame(blinkRef.current)
+        }, 2000)
+    }
+    const blinking = (t) => {
+        if(blinkStart.current===null) blinkStart.current = t
+        const t_count = Math.round((t - blinkStart.current)/125)
+        if(t_count%2===0) setOpacity(0)
+        else setOpacity(50)
+        blinkRef.current = requestAnimationFrame(blinking)
+    }
+
+    return {x,y, jump, run, stopRun, restart, hit, isRunning, isJumping, height, width, life, immune, opacity}
 }
 
 export default usePlayer

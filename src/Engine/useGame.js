@@ -1,7 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const useGame = () => {
-    const [ isEnd, setEnd ] = useState(false)  
+    const [ isEnd, setEnd ] = useState(false)
+    const [ highscore, setHighscore ] = useState(0)
     const listen = (player, obstacles, resetObs) => {
         if(player.immune) return
         if(obstacles.reduce((hit, obs) => {
@@ -14,7 +15,11 @@ const useGame = () => {
             } else {
                 player.stopRun()
                 setEnd(true)
-                alert('GAME OVER\ntotal score: '+Math.round(player.x/25))
+                const score = Math.round(player.x/25)
+                if(highscore < score){ 
+                    setHighscore(score)
+                    alert('GAME OVER\nCongrats!!\nNew Highest Score: '+score)
+                } else alert('GAME OVER\nTotal Score: '+score)
                 resetObs()
                 player.restart() 
                 setEnd(false)
@@ -22,7 +27,7 @@ const useGame = () => {
             
         }
     }
-    return {isEnd, listen}
+    return {isEnd, highscore, listen}
 }
 
 export default useGame

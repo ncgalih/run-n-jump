@@ -18,7 +18,6 @@ function App() {
   useEffect(()=>{
     if(player.x>obstacles[obstacles.length-3].x) addObstacle()
   })
-  
   useEffect(()=>{
     const handleKeyDown = (e)=>{
       if(e.key==='ArrowUp'||e.key===' '){ 
@@ -29,23 +28,29 @@ function App() {
         if(!player.isRunning) player.run()
       }
     }
+    const handleClick = () => {
+      if(!player.isRunning) player.run()
+      else if(!player.isJumping) player.jump()
+    }
     document.addEventListener('keydown', handleKeyDown)
+    document.body.addEventListener('click', handleClick)
     return () => {
       document.removeEventListener('keydown', handleKeyDown)
+      document.body.removeEventListener('click', handleClick)
     }
   })
   const paddingLeft = 80
   return (
     <>
-    <div className="canvas day" style={{
+    <div className="canvas" style={{
       backgroundImage: sky.bg
-    }}>
+    }} >
       <div className='player' onClick={()=>player.jump()} style={{
         bottom: player.y,
         left: paddingLeft,
         height: player.height,
         width: player.width,
-        opacity: player.immune? '50%' : '100%'
+        opacity: player.opacity + '%'
       }}>
       </div>
       {obstacles.length>0 && obstacles.map((obs, key)=>
@@ -58,7 +63,7 @@ function App() {
         }}>
         </div>)}
       <Background player_x={player.x} />
-      <InfoBar player={player} />
+      <InfoBar player={player} game={game} />
     </div>
     <div className='floor'></div>
     </>
